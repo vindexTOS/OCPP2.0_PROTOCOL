@@ -1,0 +1,103 @@
+<div class="wrapper">
+    <div class="sidebar" data-color="white" data-active-color="danger">
+        <sidebar-cmp></sidebar-cmp>
+    </div>
+    <div class="main-panel">
+        <navbar-cmp></navbar-cmp>
+        <div class="content">
+          <div class="row">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">{{ chargerDetail.description }}</h4>
+                <h3 class="card-category">{{ chargerDetail.status }}</h3>
+              </div>
+              <div class="card-body">
+                <p>Manufacturer: {{ chargerDetail.manufacturer }}</p>
+                <p>Serial Number: {{ chargerDetail.serial_number }}</p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Connectors</h4>
+              </div>
+              <div class="card-body">
+                <div class="carousel-container">
+                  <button (click)="previousConnector()">Previous</button>
+                  <div class="carousel-item">
+                    <div class="card shadow mb-3" style="width: 18rem;">
+                      <div class="card-body">
+                        <h5 class="card-title">{{ chargerDetail.connectors_name[currentConnectorIndex] }}</h5>
+                        <p class="card-text">{{ chargerDetail.connectors_status[currentConnectorIndex] }}</p>
+                      </div>
+                    </div>
+                    <div class="card shadow mb-3" *ngIf="chargerDetail.connectors_status[currentConnectorIndex] === 'Charging'" style="width: 18rem;">
+                      <div class="card-body">
+                        <h5 class="card-title">Charge Value</h5>
+                        <p class="card-text">{{ chargerDetail.connectors[currentConnectorIndex].currentMeterValue }}</p>
+                      </div>
+                    </div>
+                    <div class="card shadow mb-3" *ngIf="chargerDetail.connectors_status[currentConnectorIndex] === 'Charging'" style="width: 18rem;">
+                      <div class="card-body">
+                        <h5 class="card-title">Charging Time (Minutes)</h5>
+                        <p class="card-text">{{ chargerDetail.connectors[currentConnectorIndex].chargeDuration }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <button (click)="nextConnector()">Next</button>
+                </div>
+              </div>              
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+<style>
+.carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.carousel-item {
+  flex-grow: 1;
+  text-align: center;
+  display: contents;
+  padding: 10px;
+  color: black;
+  font-size: 16px; 
+  min-width: 100px;
+  min-height: 50px; 
+}
+
+button {
+  background-color: rgb(30, 126, 255); /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.status-available {
+  color: green; 
+}
+
+.status-charging {
+  color: orange; 
+}
+
+.status-unavailable {
+  color: red; 
+}
+
+.status-faulted {
+  color: red; 
+}
+
+
+</style>

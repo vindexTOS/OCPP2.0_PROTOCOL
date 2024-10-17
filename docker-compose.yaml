@@ -1,0 +1,88 @@
+version: '3'
+services:
+
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./data:/data/db
+    networks:
+      - node-network
+    logging:
+      driver: none
+
+  rabbitmq:
+    image: rabbitmq:3.12.6-management
+    container_name: csms-rabbitmq
+    restart: always
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq
+    ports:
+      - "${RABBITMQ_PORT}:${RABBITMQ_PORT}"
+      - "${RABBITMQ_UI_PORT}:${RABBITMQ_UI_PORT}"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    networks:
+      - node-network
+    logging:
+      driver: none
+
+  management-system:
+    container_name: management-system
+    build:
+      context: .
+      dockerfile: ./backend/management-system/Dockerfile
+    environment:
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_URI: ${DATABASE_URI}
+      USER_SERVICE_HOST: ${USER_SERVICE_HOST}
+      MAIL_SERVICE_URI: ${MAIL_SERVICE_URI}
+    ports:
+      - '4000:4000'
+    depends_on:
+      - mongodb
+      - rabbitmq
+    volumes:
+      - ./backend/management-system:/usr/src/app
+    networks:
+      - node-network
+
+  charge-point-node:
+    container_name: charge-point-node
+    build:
+      context: .
+      dockerfile: ./backend/charge-point-node/Dockerfile
+    ports:
+      - '4001:4001'
+    environment:
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_URI: ${DATABASE_URI}
+      USER_SERVICE_HOST: ${USER_SERVICE_HOST}
+      MAIL_SERVICE_URI: ${MAIL_SERVICE_URI}
+    volumes:
+      - ./backend/charge-point-node:/usr/src/app
+    networks:
+      - node-network
+    depends_on:
+      - rabbitmq
+
+  frontend:
+    container_name: ocpp-csms-angular
+    build:
+      context: .
+      dockerfile: ./frontend/ocpp-csms-angular/Dockerfile
+    ports:
+      - '4200:4200'
+    networks:
+      - node-network
+
+volumes:
+  mongodb:
+
+networks:
+  node-network:
+    driver: bridge

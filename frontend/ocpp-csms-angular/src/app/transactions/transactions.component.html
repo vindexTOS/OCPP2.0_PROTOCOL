@@ -1,0 +1,56 @@
+<div class="wrapper">
+    <div class="sidebar" data-color="white" data-active-color="danger">
+        <sidebar-cmp></sidebar-cmp>
+    </div>
+    <div class="main-panel">
+        <navbar-cmp></navbar-cmp>
+        <div class="content">
+          <div class="row">
+            <div class="card shadow mb-3" *ngFor="let transaction of transactions">
+              <div class="card-body">
+                <div class="card shadow mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">Connector ID: {{transaction.connectorId}}</h5>
+                  </div>
+                </div>
+                <div class="card shadow mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">ID Tag: {{transaction.idTag}}</h5>
+                  </div>
+                </div>
+                <div class="card shadow mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">Meter Start: {{transaction.meterStart}}</h5>
+                  </div>
+                </div>
+                <div class="card shadow mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">Start Timestamp: {{transaction.startTimestamp}}</h5>
+                  </div>
+                </div>
+                <div class="card shadow mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">Transaction ID: {{transaction.transactionId}}</h5>
+                  </div>
+                </div>
+                <div class="card shadow mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">Meter Stop: {{transaction.meterStop}}</h5>
+                  </div>
+                </div>
+                <div class="card shadow mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">Stop Timestamp: {{transaction.stopTimestamp}}</h5>
+                  </div>
+                </div>
+                <div class="card shadow mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">Stop Reason: {{transaction.stopReason}}</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
