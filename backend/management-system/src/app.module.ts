@@ -29,7 +29,7 @@ const cookieSession = require('cookie-session');
         type: 'direct',
       },
     ],
-    uri: 'amqp://guest:guest@rabbitmq:5672',
+    uri: 'amqp://guest:guest@172.20.0.2:5672',
   })
 ],
   controllers: [AppController],
