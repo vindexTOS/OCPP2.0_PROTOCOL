@@ -17,11 +17,17 @@ const cookieSession = require('cookie-session');
     OcppModule,
     AuthModule,
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(
-      "mongodb://localhost:27017", 
-      {
-        dbName: "root",
-      }),    
+    // MongooseModule.forRoot(
+    //   "mongodb://localhost:27017", 
+    //   {
+    //     dbName: "root",
+    //   }),    
+      MongooseModule.forRoot(
+        'mongodb://root:password@mongodb:27017/?authSource=admin'
+        , 
+        {
+          dbName: "root",
+        }),  
     RabbitMQModule.forRoot(RabbitMQModule, {
     exchanges: [
       {
