@@ -83,6 +83,8 @@ export class OcppService implements OnApplicationBootstrap {
             });
 
             client.on('BootNotification', async (request: BootNotificationRequest, cb: (response: BootNotificationResponse) => void) => {
+
+                console.log(request)
                 const serial_number = request.chargePointSerialNumber;
                 const chargePoint = await this.findBySerialNumber(serial_number);
                 if (!chargePoint) {
@@ -208,7 +210,7 @@ export class OcppService implements OnApplicationBootstrap {
                     this.logger.error(`Charge point with ID ${client.getCpId()} not found`);
                     return;
                 }
-                if (chargePointData.transactions.authorization.idTagInfo.status !== 'Accepted') {
+                if (!chargePointData.transactions.authorization.idTagInfo || chargePointData.transactions.authorization.idTagInfo.status !== 'Accepted') {
                     this.logger.error(`StartTransaction request received from ${client.getCpId()} without authorization`);
                     const response: StartTransactionResponse = {
                         transactionId: 0,
@@ -219,13 +221,19 @@ export class OcppService implements OnApplicationBootstrap {
                     cb(response);
                     return;
                 }
+            
+                // Set transaction start info
                 chargePointData.transactions.start.idTagInfo = {
                     status: 'Accepted'
                 };
+            
+         
 
                 const id = Math.floor(Math.random() * 255);
                 chargePointData.transactions.start.transactionId = id;
+      
                 await this.updateTransactionStatus(client.getCpId(), id,request.connectorId, 'Accepted');
+         
                 const response: StartTransactionResponse = chargePointData.transactions.start;
                 this.transaction.connectorId = request.connectorId;
                 this.transaction.idTag = chargePointData.transactions.authorization.idTagInfo.status;
@@ -301,17 +309,20 @@ export class OcppService implements OnApplicationBootstrap {
     }
 
     async updateTransactionStatus(chargePointId: string, transactionId: number,connectorId: number, status: "Accepted" | "Blocked" | "Expired" | "Invalid" | "ConcurrentTx"): Promise<void> {
+       
         const chargePointData = this.data.chargePoints[chargePointId];
-        if (!chargePointData) {
+         if (!chargePointData) {
+ 
             this.logger.error(`Charge point with ID ${chargePointId} not found`);
             return;
         }
-        chargePointData.transactions.start.idTagInfo.status = status;
-        this.logger.log(`Transaction ${transactionId} status updated to ${status}`);
-        if (status === 'Accepted') {
-            chargePointData.transactions.end.idTagInfo.status = 'Invalid';
+         chargePointData.transactions.start.idTagInfo.status = status;
+ 
 
-            const message = {
+         this.logger.log(`Transaction ${transactionId} status updated to ${status}`);
+         if (status === 'Accepted') {
+             chargePointData.transactions.end.idTagInfo.status = 'Invalid';
+             const message = {
                 id: chargePointId,
                 charger: this.data.chargePoints[chargePointId].chargePoint,
                 connectorId: connectorId,
@@ -320,6 +331,7 @@ export class OcppService implements OnApplicationBootstrap {
                 lastActivity: 60,
             };
             this.logger.log(`Transaction ${transactionId} started on ${chargePointId} in connector ${connectorId}`);
+ 
             this.chargePointModel.findOne({ _id: chargePointData.chargePoint._id }).then(chargePoint => {
                 chargePoint.status = Status.Charging;
                 chargePoint.connectors[connectorId].status = Status.Charging;
@@ -328,11 +340,13 @@ export class OcppService implements OnApplicationBootstrap {
                 chargePoint.markModified('connectors');
                 this.logger.log(`status::: ${chargePoint.status}`);
                 chargePoint.save();
-            }).catch(err => {
+             }).catch(err => {
+ 
                 this.logger.error(`Error updating transaction status: ${err}`);
             });
+ 
             await this.amqpConnection.publish('management.system', 'transaction.routing.key', message);
-
+ 
         }
         else if (status === 'Invalid') {
             this.logger.log(`Transaction ${transactionId} ended for connector ${connectorId}`);
@@ -345,7 +359,15 @@ export class OcppService implements OnApplicationBootstrap {
             }).catch(err => {
                 this.logger.error(`Error updating transaction status: ${err}`);
             });
-            await this.transactionModel.create(this.transaction);
+            try {
+                await this.transactionModel.create(this.transaction);
+            } catch (error) {
+                if (error.name === 'ValidationError') {
+                    this.logger.error(`Transaction validation failed: ${error.message}`);
+                 } else {
+                    this.logger.error(`Error creating transaction: ${error}`);
+                }
+            }
             this.transaction = this.newEmptyTransaction();
         }
     }
