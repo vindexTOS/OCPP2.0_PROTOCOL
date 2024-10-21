@@ -36,10 +36,7 @@ const cookieSession = require('cookie-session');
           },
         ],
         uri: 'amqp://guest:guest@localhost:5672',
-        connectionInitOptions: { 
-          wait: false, // Set to true if you want to wait until the connection is established
-          timeout: 10000 // Increase timeout to 10 seconds or more
-        },
+     
       }),
 ],
   controllers: [AppController],
