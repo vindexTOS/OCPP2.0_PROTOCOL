@@ -24,7 +24,7 @@ import { Transaction, TransactionSchema } from './schemas/transactions.schema';
         },
       ], 
 
-      uri: 'amqp://guest:guest@37.27.179.61:5672',    }),
+      uri: 'amqp://myuser:mypassword@37.27.179.61:5672',    }),
     MongooseModule.forFeatureAsync([
       {
         name: ChargePoint.name,
