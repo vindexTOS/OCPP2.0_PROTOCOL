@@ -8,7 +8,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { NgChartsModule } from 'ng2-charts';
-
+import { CdkTableModule } from '@angular/cdk/table';
 import { AppRoutingModule } from './app.routes';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -21,7 +21,7 @@ import { DetailComponent } from './detail/detail.component';
 import { TransactionComponent } from './transactions/transactions.component';
 
 @NgModule({
-  declarations: [
+  declarations: [CdkTableModule,
     AppComponent,
     LoginComponent,
     DashboardComponent,
