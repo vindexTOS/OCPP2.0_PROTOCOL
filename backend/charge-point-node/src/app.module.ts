@@ -13,7 +13,8 @@ import { OcppModule } from './ocpp/ocpp.module';
   OcppModule,
   ConfigModule.forRoot(),
   MongooseModule.forRoot(
-"mongodb://root:password@mongodb:27017/?authSource=admin", 
+ 
+"mongodb://localhost:27017", 
     {
       dbName: "root",
     }),

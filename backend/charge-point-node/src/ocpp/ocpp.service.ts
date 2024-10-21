@@ -84,13 +84,6 @@ export class OcppService implements OnApplicationBootstrap {
             client.on('close', (code, reason) => {
                 this.logger.log(`Client ${client.getCpId()} closed connection: ${code} - ${reason}`);
             });
-<<<<<<< HEAD
-    
-            // Optional: Log when an error occurs
-            client.on('error', (error) => {
-                this.logger.error(`Error from client ${client.getCpId()}: ${error.message}`);
-            });
-=======
 
             client.on('BootNotification', async (request: BootNotificationRequest, cb: (response: BootNotificationResponse) => void) => {
 
@@ -304,7 +297,6 @@ export class OcppService implements OnApplicationBootstrap {
                 cb(response);
             });
 
->>>>>>> 22c9827cce395445c665993f9ab35b3f2a35f14b
         });
   
 
