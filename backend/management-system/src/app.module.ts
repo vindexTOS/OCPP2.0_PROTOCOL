@@ -29,7 +29,8 @@ const cookieSession = require('cookie-session');
         type: 'direct',
       },
     ],
-    uri: 'amqp://csms:csms@localhost:5672',
+    // uri: 'amqp://csms:csms@localhost:5672',
+  uri: 'amqp://guest:guest@localhost:5672',
   })
 ],
   controllers: [AppController],

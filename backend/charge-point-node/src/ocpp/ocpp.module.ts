@@ -23,7 +23,7 @@ import { Transaction, TransactionSchema } from './schemas/transactions.schema';
           type: 'direct',
         },
       ],
-      uri: 'amqp://csms:csms@localhost:5672',
+      uri: 'amqp://guest:guest@localhost:5672',
     }),
     MongooseModule.forFeatureAsync([
       {
