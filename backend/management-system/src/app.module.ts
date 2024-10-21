@@ -17,17 +17,17 @@ const cookieSession = require('cookie-session');
     OcppModule,
     AuthModule,
     ConfigModule.forRoot(),
-    // MongooseModule.forRoot(
-    //   "mongodb://localhost:27017", 
-    //   {
-    //     dbName: "root",
-    //   }),    
-      MongooseModule.forRoot(
-        'mongodb://root:password@mongodb:27017/?authSource=admin'
-        , 
-        {
-          dbName: "root",
-        }),  
+    MongooseModule.forRoot(
+      'mongodb://37.27.179.61/root', 
+      {
+        dbName: "root",
+      }),    
+      // MongooseModule.forRoot(
+      //   'mongodb://root:password@mongodb:27017/?authSource=admin'
+      //   , 
+      //   {
+      //     dbName: "root",
+      //   }),  
     RabbitMQModule.forRoot(RabbitMQModule, {
     exchanges: [
       {
@@ -35,12 +35,7 @@ const cookieSession = require('cookie-session');
         type: 'direct',
       },
     ],
-<<<<<<< HEAD
-    // uri: 'amqp://csms:csms@localhost:5672',
-  uri: 'amqp://guest:guest@localhost:5672',
-=======
     uri: 'amqp://guest:guest@172.20.0.2:5672',
->>>>>>> 22c9827cce395445c665993f9ab35b3f2a35f14b
   })
 ],
   controllers: [AppController],
