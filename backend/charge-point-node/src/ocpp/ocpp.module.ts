@@ -24,7 +24,10 @@ import { Transaction, TransactionSchema } from './schemas/transactions.schema';
         },
       ], 
 
-      uri: 'amqp://guest:guest@localhost:5672',    }),
+      uri: 'amqp://guest:guest@172.20.0.2:5672',
+
+    
+    }),
     MongooseModule.forFeatureAsync([
       {
         name: ChargePoint.name,
