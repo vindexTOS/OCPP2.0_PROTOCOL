@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ConfigService {
-  private apiUrl: string = 'http://37.27.179.61/:4000';
+  private apiUrl: string = 'http://37.27.179.61/:4002';
 
   getApiUrl(): string {
     return this.apiUrl;
