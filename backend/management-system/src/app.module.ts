@@ -28,15 +28,19 @@ const cookieSession = require('cookie-session');
       //   {
       //     dbName: "root",
       //   }),  
-    RabbitMQModule.forRoot(RabbitMQModule, {
-    exchanges: [
-      {
-        name: 'management.system',
-        type: 'direct',
-      },
-    ],
-    uri: 'amqp://myuser:mypassword@37.27.179.61:5672',  
-  })
+      RabbitMQModule.forRoot(RabbitMQModule, {
+        exchanges: [
+          {
+            name: 'management.system',
+            type: 'direct',
+          },
+        ],
+        uri: 'amqp://myuser:mypassword@37.27.179.61:5672',
+        connectionInitOptions: { 
+          wait: false, // Set to true if you want to wait until the connection is established
+          timeout: 10000 // Increase timeout to 10 seconds or more
+        },
+      }),
 ],
   controllers: [AppController],
   providers: [AppService],
