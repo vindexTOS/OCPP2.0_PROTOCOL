@@ -35,7 +35,7 @@ const cookieSession = require('cookie-session');
         type: 'direct',
       },
     ],
-    uri: 'amqp://guest:guest@172.20.0.2:5672',
+    uri: 'amqp://guest:guest@37.27.179.61:5672',
   })
 ],
   controllers: [AppController],
